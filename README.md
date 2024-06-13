@@ -18,7 +18,7 @@ In this study, we investigate the impact of hierarchical feature fusion with pre
 ## Method
 
 <div align=center>
-	<img src="res/model-arch.png" width="800" >
+	<img src="model-arch.png" width="800" >
 </div>
 
 This study introduces MFF-GP (Multilevel Feature Fusion Guided by Prompts), a novel method guiding Dynamic Neural Networks (DNN) to regulate the fusion of hierarchical features and also allow prompt vectors to fine-tune unimodal pre-training models. Specifically, by con- catenating prompt vectors with modality-specific raw features as inputs to the pre-training model, it becomes possible to fine-tune the pre-training model while guiding a dynamic neural network to dynamically route for selecting an appropriate fusion module to handle features at each hierarchy. This approach offers a more appropriate fusion method by considering hierarchical feature representations for different tasks. Furthermore, MFF-GP supports plug-and-play for fusion modules, enabling the addition or removal of fusion modules conve- niently. This significantly enhances the flexibility of fusion, offering adaptability for several multimodal tasks.
