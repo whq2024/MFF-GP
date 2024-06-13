@@ -1,0 +1,91 @@
+!Config
+base: !BaseConfig
+  global_seed: 1001
+  project_name: idea04.v7
+dataset: !DatasetConfig
+  name: snli_ve
+  root: datasets
+  download: true
+  in_memory: false
+  clip_size: 224
+  test_loader: !LoaderConfig
+    batch_size: 128
+    drop_last: &drop_last false
+    num_workers: &num_workers 8
+    pin_memory: &pin_memory false
+    shuffle: false
+  train_loader: !LoaderConfig
+    batch_size: 8
+    drop_last: *drop_last
+    num_workers: *num_workers
+    pin_memory: *pin_memory
+    shuffle: true
+  valid_loader: !LoaderConfig
+    batch_size: 128
+    drop_last: *drop_last
+    num_workers: *num_workers
+    pin_memory: *pin_memory
+    shuffle: false
+dynamic: !DynamicModelConfig
+  all_status: true
+  fusion_layers: 12
+  modules:
+    - adaptive
+    - add
+    - attention
+    - concat
+    - identity
+    - mul
+  num_heads: 8
+  dropout: 0.2
+  loss_scaler: auto
+  scaler_params:
+    init: 0.01
+    start: 0.001
+    end: 0.2
+    start_epoch: &start_epoch 10
+  weight_scaler: 0.1
+  tau: auto
+  tau_params:
+    init: 1.0
+    start: 1.0
+    end: 0.001
+    init_epochs: *start_epoch
+  avg_cls: false
+optimizer: !OptimizerConfig
+  lr: 1.0e-05
+  name: lion
+  params:
+    betas: !!python/tuple
+      - 0.9
+      - 0.99
+    weight_decay: 1.0
+  scheduler_interval: epoch
+  scheduler_name: cosine
+  scheduler_params:
+    T_max: &max_epochs 50
+    eta_min: 1.0e-07
+    last_epoch: -1
+pretrain: !FrozenParameters
+  bert_name: bert-base-uncased
+  vit_name: google/vit-base-patch16-224
+  cache_dir: null
+  force_download: false
+  other: { }
+  prompt_num: 1
+  single_prompt: true
+  masked_prompt: true
+trainer: !TrainerConfig
+  num_nodes: 1
+  devices: auto
+  strategy: auto
+  accelerator: auto
+  accumulate_grad_batches: 32
+  check_val_every_n_epoch: 1
+  gradient_clip_algorithm: norm
+  num_sanity_val_steps: 2
+  gradient_clip_val: 1.0
+  log_every_n_steps: 10
+  max_epochs: *max_epochs
+  precision: 32-true
+  save_top_k: 5
